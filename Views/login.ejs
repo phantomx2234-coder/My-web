@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<h2>Login</h2>
+<% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+<form method="POST" action="/login" class="col-md-6">
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input class="form-control" type="email" name="email" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    <input class="form-control" type="password" name="password" required>
+  </div>
+  <button class="btn btn-primary">Login</button>
+</form>
+<p class="mt-3">No account? <a href="/register">Register</a></p>
+<%- include('partials/footer') %>

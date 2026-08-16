@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+<h2>List an Item</h2>
+<form method="POST" action="/marketplace/new" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input class="form-control" name="title" required placeholder="e.g. Calculus textbook, 3rd edition">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" name="description" rows="3"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+    <select class="form-select" name="category">
+      <% categories.forEach(c => { %><option><%= c %></option><% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Price (₹)</label>
+    <input class="form-control" type="number" step="0.01" min="0" name="price" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Condition</label>
+    <select class="form-select" name="condition">
+      <option>New</option><option>Good</option><option>Used</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Transaction Type</label>
+    <select class="form-select" name="transaction_type">
+      <option value="sale">For Sale</option>
+      <option value="rent">For Rent</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Photo (optional)</label>
+    <input class="form-control" type="file" name="image" accept="image/*">
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
+<%- include('../partials/footer') %>

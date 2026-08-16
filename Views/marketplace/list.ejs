@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+<h2>Marketplace</h2>
+
+<form class="row g-2 mb-4" method="GET">
+  <div class="col-md-4">
+    <input class="form-control" name="q" placeholder="Search listings..." value="<%= q %>">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="transaction_type">
+      <option value="">All</option>
+      <option value="sale" <%= transaction_type==='sale'?'selected':'' %>>For Sale</option>
+      <option value="rent" <%= transaction_type==='rent'?'selected':'' %>>For Rent</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="category">
+      <option value="">All Categories</option>
+      <% categories.forEach(c => { %>
+        <option value="<%= c %>" <%= category===c?'selected':'' %>><%= c %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-outline-primary w-100">Search</button></div>
+</form>
+
+<% if (user) { %><a href="/marketplace/new" class="btn btn-success mb-3">+ List an Item</a><% } %>
+
+<div class="row">
+<% listings.forEach(l => { %>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <% if (l.image_path) { %>
+        <img src="<%= l.image_path %>" class="card-img-top" style="height:180px;object-fit:cover;">
+      <% } %>
+      <div class="card-body">
+        <span class="badge bg-info text-dark"><%= l.transaction_type %></span>
+        <span class="badge bg-secondary"><%= l.status %></span>
+        <h5 class="card-title mt-2"><%= l.title %></h5>
+        <p class="fw-bold">₹<%= l.price %></p>
+        <a href="/marketplace/<%= l.id %>" class="btn btn-sm btn-outline-primary">View</a>
+      </div>
+    </div>
+  </div>
+<% }) %>
+<% if (!listings.length) { %><p class="text-muted">No listings found.</p><% } %>
+</div>
+<%- include('../partials/footer') %>

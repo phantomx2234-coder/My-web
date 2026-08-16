@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+<h2>Report an Item</h2>
+<form method="POST" action="/items/new" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Type</label>
+    <select class="form-select" name="type" required>
+      <option value="lost">Lost — I lost something</option>
+      <option value="found">Found — I found something</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input class="form-control" name="title" required placeholder="e.g. Black backpack with laptop">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" name="description" rows="3"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+    <select class="form-select" name="category">
+      <% categories.forEach(c => { %><option><%= c %></option><% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Location</label>
+    <input class="form-control" name="location" placeholder="e.g. Library, 2nd floor">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Date</label>
+    <input class="form-control" type="date" name="date_occurred">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Photo (optional)</label>
+    <input class="form-control" type="file" name="image" accept="image/*">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Identifying Detail <span class="text-muted">(private — only used to verify claims)</span></label>
+    <input class="form-control" name="identifying_detail" placeholder='e.g. "keychain has a small wolf charm"'>
+    <div class="form-text">This is never shown publicly. Claimants must describe a matching detail before you approve their claim and share contact info.</div>
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
+<%- include('../partials/footer') %>

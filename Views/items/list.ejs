@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+<h2>Lost & Found</h2>
+
+<form class="row g-2 mb-4" method="GET">
+  <div class="col-md-4">
+    <input class="form-control" name="q" placeholder="Search items..." value="<%= q %>">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="type">
+      <option value="">All</option>
+      <option value="lost" <%= type==='lost'?'selected':'' %>>Lost</option>
+      <option value="found" <%= type==='found'?'selected':'' %>>Found</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="category">
+      <option value="">All Categories</option>
+      <% categories.forEach(c => { %>
+        <option value="<%= c %>" <%= category===c?'selected':'' %>><%= c %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-outline-primary w-100">Search</button></div>
+</form>
+
+<% if (user) { %><a href="/items/new" class="btn btn-success mb-3">+ Report an Item</a><% } %>
+
+<div class="row">
+<% items.forEach(item => { %>
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <% if (item.image_path) { %>
+        <img src="<%= item.image_path %>" class="card-img-top" style="height:180px;object-fit:cover;">
+      <% } %>
+      <div class="card-body">
+        <span class="badge bg-<%= item.type==='lost'?'danger':'success' %>"><%= item.type %></span>
+        <% if (item.status !== 'open') { %><span class="badge bg-secondary"><%= item.status %></span><% } %>
+        <h5 class="card-title mt-2"><%= item.title %></h5>
+        <p class="card-text text-muted small"><%= item.category %> · <%= item.location %></p>
+        <a href="/items/<%= item.id %>" class="btn btn-sm btn-outline-primary">View</a>
+      </div>
+    </div>
+  </div>
+<% }) %>
+<% if (!items.length) { %><p class="text-muted">No items found.</p><% } %>
+</div>
+<%- include('../partials/footer') %>

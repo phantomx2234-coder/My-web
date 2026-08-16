@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+<% if (claimed) { %><div class="alert alert-success">Your claim was submitted. The poster will review it and reach out if approved.</div><% } %>
+<% if (flagged) { %><div class="alert alert-info">Thanks — this post has been flagged for admin review.</div><% } %>
+
+<div class="row">
+  <div class="col-md-6">
+    <% if (item.image_path) { %><img src="<%= item.image_path %>" class="img-fluid rounded mb-3"><% } %>
+  </div>
+  <div class="col-md-6">
+    <span class="badge bg-<%= item.type==='lost'?'danger':'success' %>"><%= item.type %></span>
+    <h2><%= item.title %></h2>
+    <p><%= item.description %></p>
+    <p><strong>Category:</strong> <%= item.category %></p>
+    <p><strong>Location:</strong> <%= item.location %></p>
+    <p><strong>Date:</strong> <%= item.date_occurred %></p>
+    <p><strong>Posted by:</strong> <%= item.owner_name %></p>
+    <p><strong>Status:</strong> <%= item.status %></p>
+
+    <% if (user && user.id !== item.owner_id) { %>
+      <form method="POST" action="/chat/start" class="d-inline">
+        <input type="hidden" name="item_type" value="item">
+        <input type="hidden" name="item_id" value="<%= item.id %>">
+        <button class="btn btn-primary mb-2">Message Poster</button>
+      </form>
+
+      <% if (item.type === 'found' && item.status === 'open') { %>
+        <hr>
+        <h5>Claim this item</h5>
+        <p class="text-muted small">Describe an identifying detail only the true owner would know. The finder reviews it before any contact info is shared.</p>
+        <form method="POST" action="/items/<%= item.id %>/claim">
+          <textarea class="form-control mb-2" name="submitted_detail" required placeholder="Describe an identifying detail..."></textarea>
+          <button class="btn btn-outline-primary">Submit Claim</button>
+        </form>
+      <% } %>
+
+      <hr>
+      <form method="POST" action="/items/<%= item.id %>/flag">
+        <input class="form-control mb-2" name="reason" placeholder="Reason for flagging (optional)">
+        <button class="btn btn-sm btn-outline-danger">Flag as inappropriate</button>
+      </form>
+    <% } %>
+
+    <% if (user && user.id === item.owner_id && claims.length) { %>
+      <hr>
+      <h5>Claims Received</h5>
+      <% claims.forEach(c => { %>
+        <div class="border rounded p-2 mb-2">
+          <p class="mb-1"><strong><%= c.claimant_name %>:</strong> <%= c.submitted_detail %></p>
+          <span class="badge bg-secondary"><%= c.status %></span>
+          <% if (c.status === 'approved') { %>
+            <span class="ms-2">Contact: <%= c.claimant_email %></span>
+          <% } else if (c.status === 'pending') { %>
+            <form method="POST" action="/items/<%= item.id %>/claims/<%= c.id %>/approve" class="d-inline">
+              <button class="btn btn-sm btn-success mt-1">Approve & Reveal Contact</button>
+            </form>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+<%- include('../partials/footer') %>

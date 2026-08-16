@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+<h2>Messages</h2>
+<div class="list-group">
+<% convos.forEach(c => { %>
+  <a href="/chat/<%= c.id %>" class="list-group-item list-group-item-action">
+    <strong><%= c.other_name %></strong>
+    <span class="text-muted">— <%= c.item_type %> #<%= c.item_id %> — <%= c.last_message || 'No messages yet' %></span>
+  </a>
+<% }) %>
+<% if (!convos.length) { %><p class="text-muted">No conversations yet.</p><% } %>
+</div>
+<%- include('../partials/footer') %>

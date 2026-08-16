@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+<h2>Admin Dashboard</h2>
+
+<h4>Pending Flags</h4>
+<table class="table">
+<thead><tr><th>Type</th><th>Target ID</th><th>Reason</th><th>Reported By</th><th>Action</th></tr></thead>
+<tbody>
+<% flags.forEach(f => { %>
+  <tr>
+    <td><%= f.target_type %></td>
+    <td><a href="/<%= f.target_type === 'item' ? 'items' : 'marketplace' %>/<%= f.target_id %>">#<%= f.target_id %></a></td>
+    <td><%= f.reason %></td>
+    <td><%= f.reporter_name %></td>
+    <td>
+      <form method="POST" action="/admin/flags/<%= f.id %>/resolve" class="d-flex gap-1">
+        <button name="action" value="remove" class="btn btn-sm btn-danger">Remove Post</button>
+        <button name="action" value="dismiss" class="btn btn-sm btn-secondary">Dismiss</button>
+      </form>
+    </td>
+  </tr>
+<% }) %>
+<% if (!flags.length) { %><tr><td colspan="5" class="text-muted">No pending flags.</td></tr><% } %>
+</tbody>
+</table>
+
+<h4 class="mt-4">Users</h4>
+<table class="table">
+<thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr></thead>
+<tbody>
+<% users.forEach(u => { %>
+  <tr>
+    <td><%= u.name %></td><td><%= u.email %></td><td><%= u.role %></td><td><%= u.status %></td>
+    <td>
+      <% if (u.role !== 'admin') { %>
+        <% if (u.status === 'active') { %>
+          <form method="POST" action="/admin/users/<%= u.id %>/suspend"><button class="btn btn-sm btn-warning">Suspend</button></form>
+        <% } else { %>
+          <form method="POST" action="/admin/users/<%= u.id %>/reinstate"><button class="btn btn-sm btn-success">Reinstate</button></form>
+        <% } %>
+      <% } %>
+    </td>
+  </tr>
+<% }) %>
+</tbody>
+</table>
+<%- include('../partials/footer') %>
